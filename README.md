@@ -41,6 +41,6 @@
 Create a file named `.env` in the root directory of the project and add the following lines:
 
 ```bash
-OPENAI_API_URL=http://localhost:11434/v1
+OPENAI_API_URL=http://localhost:11434
 OPENAI_API_KEY=unused
 ```
