@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import lancedb
 from openai import OpenAI
@@ -7,8 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize OpenAI client
-client = OpenAI()
-
+OPENAI_API_URL = os.environ.get("OPENAI_API_URL")
+client = OpenAI(base_url=OPENAI_API_URL + "/v1")
 
 # Initialize LanceDB connection
 @st.cache_resource
@@ -46,7 +47,7 @@ def get_context(query: str, table, num_results: int = 5) -> str:
         source_parts = []
         if filename:
             source_parts.append(filename)
-        if page_numbers:
+        if len(page_numbers) > 0:
             source_parts.append(f"p. {', '.join(str(p) for p in page_numbers)}")
 
         source = f"\nSource: {' - '.join(source_parts)}"
@@ -80,7 +81,7 @@ def get_chat_response(messages, context: str) -> str:
 
     # Create the streaming response
     stream = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="granite3.3:2b",
         messages=messages_with_context,
         temperature=0.7,
         stream=True,

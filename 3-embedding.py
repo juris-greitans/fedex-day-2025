@@ -1,15 +1,6 @@
 from typing import List
 import os;
 
-import docling_core
-import docling_core.transforms
-import docling_core.transforms.chunker
-import docling_core.transforms.chunker.tokenizer
-import docling_core.transforms.chunker.tokenizer.base
-import docling_core.transforms.chunker.tokenizer.huggingface
-import docling_core.transforms.chunker.tokenizer.openai
-import docling_core.types
-import docling_core.utils
 import lancedb
 from docling.chunking import HybridChunker
 from docling.document_converter import DocumentConverter
@@ -17,14 +8,11 @@ from docling_core.types import DoclingDocument
 from dotenv import load_dotenv
 from lancedb.embeddings import get_registry
 from lancedb.pydantic import LanceModel, Vector
-from openai import OpenAI
 from transformers import AutoTokenizer
 
 load_dotenv()
 
 OPENAI_API_URL = os.environ.get("OPENAI_API_URL")
-# Initialize OpenAI client (make sure you have OPENAI_API_KEY in your environment variables)
-client = OpenAI(base_url=OPENAI_API_URL)
 
 # Get the OpenAI embedding function
 func = get_registry().get("ollama").create(name="mxbai-embed-large", host=OPENAI_API_URL)
