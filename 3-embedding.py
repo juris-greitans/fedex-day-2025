@@ -1,4 +1,5 @@
 from typing import List
+import os;
 
 import lancedb
 from docling.chunking import HybridChunker
@@ -11,8 +12,22 @@ from utils.tokenizer import OpenAITokenizerWrapper
 
 load_dotenv()
 
+OPENAI_API_URL = os.environ.get("OPENAI_API_URL")
 # Initialize OpenAI client (make sure you have OPENAI_API_KEY in your environment variables)
-client = OpenAI()
+client = OpenAI(base_url=OPENAI_API_URL)
+
+SUPPORTED_FILE_EXTENSIONS = ['.pdf', '.docx', '.txt', '.md']
+
+def get_files_in_directory(directory: str) -> List[str]:
+    """
+    Get a list of all files in the specified directory.
+    """
+    files = []
+    for root, _, filenames in os.walk(directory):
+        for filename in filenames:
+            if any(filename.endswith(ext) for ext in SUPPORTED_FILE_EXTENSIONS):
+                files.append(os.path.join(root, filename))
+    return files
 
 
 tokenizer = OpenAITokenizerWrapper()  # Load our custom tokenizer for OpenAI
@@ -20,7 +35,7 @@ MAX_TOKENS = 8191  # text-embedding-3-large's maximum context length
 
 
 # --------------------------------------------------------------
-# Extract the data
+# Extract the data from input directory
 # --------------------------------------------------------------
 
 converter = DocumentConverter()
