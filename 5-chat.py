@@ -60,6 +60,14 @@ def get_context(query: str, table, num_results: int = 5) -> str:
     return "\n\n".join(contexts)
 
 
+default_system_prompt = """You are a helpful assistant that answers questions based on the provided context.
+    Use only the information from the context to answer questions. If you're unsure or the context
+    doesn't contain the relevant information, say so.
+    
+    Context:
+    {context}
+    """
+
 def get_chat_response(messages, context: str) -> str:
     """Get streaming response from OpenAI API.
 
@@ -70,15 +78,16 @@ def get_chat_response(messages, context: str) -> str:
     Returns:
         str: Model's response
     """
-    system_prompt = f"""You are a helpful assistant that answers questions based on the provided context.
-    Use only the information from the context to answer questions. If you're unsure or the context
-    doesn't contain the relevant information, say so.
-    
-    Context:
-    {context}
-    """
+    if os.path.exists("system-prompt.md"):
+        with open("system-prompt.md", "r") as f:
+            system_prompt = f.read().format(context=context)
+    else:
+        system_prompt = default_system_prompt.format(context=context)
 
-    messages_with_context = [{"role": "system", "content": system_prompt}, {"role": "control", "content": "thinking"}, *messages]
+    messages_with_context = [
+        {"role": "system", "content": system_prompt},
+        {"role": "control", "content": "thinking"},
+        *messages]
 
     # Create the streaming response
     stream = client.chat.completions.create(
