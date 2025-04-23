@@ -78,7 +78,7 @@ def get_chat_response(messages, context: str) -> str:
     {context}
     """
 
-    messages_with_context = [{"role": "system", "content": system_prompt}, *messages]
+    messages_with_context = [{"role": "system", "content": system_prompt}, {"role": "control", "content": "thinking"}, *messages]
 
     # Create the streaming response
     stream = client.chat.completions.create(
