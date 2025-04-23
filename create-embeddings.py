@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from lancedb.embeddings import get_registry
 from lancedb.pydantic import LanceModel, Vector
 from transformers import AutoTokenizer
+from googletrans import Translator
 
 load_dotenv()
 
@@ -38,8 +39,6 @@ class Chunks(LanceModel):
 
 
 
-SUPPORTED_FILE_EXTENSIONS = ['.pdf', '.docx', '.txt', '.md']
-
 def get_files_in_directory(directory: str) -> List[str]:
     """
     Get a list of all files in the specified directory.
@@ -47,8 +46,7 @@ def get_files_in_directory(directory: str) -> List[str]:
     files = []
     for root, _, filenames in os.walk(directory):
         for filename in filenames:
-            if any(filename.endswith(ext) for ext in SUPPORTED_FILE_EXTENSIONS):
-                files.append(os.path.join(root, filename))
+            files.append(os.path.join(root, filename))
     return files
 
 
