@@ -7,9 +7,15 @@
 - Install [Ollama](https://ollama.com/download)
 - Pull at least one model [suitable for embeddings](https://ollama.com/search?c=embedding), for example [nomic-embed-text](https://ollama.com/library/nomic-embed-text) or [mxbai-embed-large](https://ollama.com/library/mxbai-embed-large):
 
-  ```
+  ```shell
   ollama pull nomic-embed-text
   ollama pull mxbai-embed-large
+  ```
+  
+- Pull at least one model that can be used for response generation, for example granite3.3:2b:
+
+  ```shell
+  ollama pull granite3.3:2b
   ```
 
 ### Python
@@ -38,9 +44,10 @@
 
 ### Configuration
 
-Create a file named `.env` in the root directory of the project and add the following lines:
+Create a file named `.env` in the root directory of the project and add the following lines (replace CHAT_MODEL_NAME with the model you downloaded):
 
 ```bash
 OPENAI_API_URL=http://localhost:11434
 OPENAI_API_KEY=unused
+CHAT_MODEL_NAME=granite3.3:2b
 ```

@@ -10,6 +10,7 @@ load_dotenv()
 # Initialize OpenAI client
 OPENAI_API_URL = os.environ.get("OPENAI_API_URL")
 client = OpenAI(base_url=OPENAI_API_URL + "/v1")
+CHAT_MODEL_NAME = os.environ.get("CHAT_MODEL_NAME", "granite3.3:2b")  # Model name for chat completions
 
 # Initialize LanceDB connection
 @st.cache_resource
@@ -81,7 +82,7 @@ def get_chat_response(messages, context: str) -> str:
 
     # Create the streaming response
     stream = client.chat.completions.create(
-        model="granite3.3:2b",
+        model=CHAT_MODEL_NAME,
         messages=messages_with_context,
         temperature=0.7,
         stream=True,
